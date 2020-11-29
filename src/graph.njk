@@ -1,0 +1,94 @@
+---
+pagination:
+    data: collections.graphs
+    size: 100
+    alias: graphs
+    addAllPagesToCollections: true
+tags:
+- g1pages
+permalink: /graphs/g1/{{ graphs[0].prime }}-{{ graphs[graphs.length - 1].prime }}.html
+---
+{% extends "layouts/base.njk" %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-sm-6">
+        <h1>{{ graphs[0].prime }} – {{ graphs[graphs.length - 1].prime }}</h1>
+    </div>
+    <div class="col-sm-6">
+        <nav aria-label="Page navigation" style="margin-top:10px">
+          <ul class="pagination justify-content-end">
+            <li class="page-item">
+              <a class="page-link" href="{{ pagination.href.previous }}" aria-label="Previous">
+                <span aria-hidden="true">&laquo; Previous</span>
+              </a>
+            </li>
+            <li class="page-item">
+              <a class="page-link" href="{{ pagination.href.next }}" aria-label="Next">
+                <span aria-hidden="true">Next &raquo;</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
+    </div>
+</div>
+
+<p>This page contains computed data for the graphs \(\Gamma_1(\cdot;{{ graphs[0].prime }})\) through \(\Gamma_1(\cdot;{{ graphs[graphs.length - 1].prime }})\). You can read about the displayed information in the <a href="/glossary.html">glossary</a>.</p>
+
+<p>
+    {% for graph in graphs %}
+    <a href="#{{graph.prime}}">{{ graph.prime }}</a> / 
+    {% endfor %}
+</p>
+
+{% for graph in graphs %}
+<div>
+<h2><a id="{{graph.prime}}"></a>p = {{ graph.prime }}</h2>
+<a href="/glossary.html#supersingular-elliptic-curves" class="badge badge-pill badge-primary">{{ graph.nodes }} nodes</a>
+<a href="/glossary.html#spine" class="badge badge-pill badge-primary">{{ graph.spine }} spinal nodes</a>
+
+<div class="table-responsive">
+    <table class="table">
+        <thead class="thead-light">
+        <tr>
+          <th scope="col">\(\ell\) <a href="/glossary.html#isogeny"><i class="far fa-question-circle" aria-hidden="true"></i></a></th>
+          <th scope="col">diameter <a href="/glossary.html#diameter"><i class="far fa-question-circle" aria-hidden="true"></i></a></th>
+          <th scope="col">\(c_\ell\) <a href="/glossary.html#isogenous-conjugate-pairs"><i class="far fa-question-circle" aria-hidden="true"></i></a></th>
+          <th scope="col">\(\lambda_2\) <a href="/glossary.html#eigenvalues"><i class="far fa-question-circle" aria-hidden="true"></i></a></th>
+          <th scope="col">\(\lambda_n\) <a href="/glossary.html#eigenvalues"><i class="far fa-question-circle" aria-hidden="true"></i></a></th>
+        </tr>
+      </thead>
+      {% for ell, ell_data in graph.ell %}
+        <tr>
+          <th scope="row">{{ ell }}</th>
+          <td>{{ ell_data.diameter }}</td>
+          <td>{{ ell_data.conjugate_isogenous_pairs }}</td>
+          <td>{{ ell_data.eigenvalues[0] | truncate }}</td>
+          <td>{{ ell_data.eigenvalues[1] | truncate }}</td>
+        </tr>
+      {% endfor %}
+    </table>
+</div>
+<div style="text-align: right"><a href="#">Go to the top</a></div>
+<hr>
+</div>
+{% endfor %}
+
+<nav aria-label="Page navigation">
+  <ul class="pagination justify-content-center">
+    <li class="page-item">
+      <a class="page-link" href="{{ pagination.href.previous }}" aria-label="Previous">
+        <span aria-hidden="true">&laquo; Previous</span>
+      </a>
+    </li>
+    <li class="page-item"><a class="page-link" href="/index.html">Home</a></li>
+    <li class="page-item">
+      <a class="page-link" href="{{ pagination.href.next }}" aria-label="Next">
+        <span aria-hidden="true">Next &raquo;</span>
+      </a>
+    </li>
+  </ul>
+</nav>
+
+{% endblock %}

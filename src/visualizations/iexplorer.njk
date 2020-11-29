@@ -1,0 +1,156 @@
+---
+permalink: /visualizations/iexplorer.js
+---
+var w = document.getElementById("chart").offsetWidth,
+    h = w*0.75,
+    r = 5,
+    sw = 1.5;
+
+var simulation = d3.forceSimulation()
+    .force("charge", d3.forceManyBody().strength(charge))
+    .force("x", d3.forceX(w/2))
+    .force("y", d3.forceY(h/2))
+    .force("collide", d3.forceCollide(2 * r));
+
+d3.select("#chart").html("");
+
+svg = d3.select("#chart").append("svg:svg")
+.attr("width", w)
+.attr("height", h)
+.attr("color", "#fff")
+.attr("style", "border:1px black solid;");
+
+
+d3.json(data).then(function(obj) {
+  nodes = obj.nodes;
+  links = obj.isogenies;
+  for (i=0; i < nodes.length; i++) {
+    if (nodes[i].x != undefined && nodes[i].y != undefined) {
+      continue;
+    }
+    
+    if (pins != undefined && nodes[i].special in pins) {
+      nodes[i].x = pins[nodes[i].special][0] * w;
+      nodes[i].y = pins[nodes[i].special][1] * h;
+    } else {
+      nodes[i].x = Math.random() * w;
+      nodes[i].y = Math.random() * h;
+    }
+  }
+
+  simulation.nodes(nodes);
+  simulation.force("link", d3.forceLink(links).id(d => d.j).distance(0).strength(0.05))
+
+  svg
+    .selectAll("line")
+    .data(links)
+    .join("line")
+      .attr("stroke", "#333")
+      .attr("stroke-opacity", (d) => {
+        if (d.special == "A" || d.special == "B") return 1;
+        else return 0.3;
+      })
+      .attr("stroke-width", (d) => {
+        if (d.special == "A" || d.special == "B") return 2 * sw;
+        else return sw;
+      })
+      .attr("stroke", function(d) {
+        if (d.special in colormap){
+            return colormap[d.special](d);
+        } else if (d.degree in colormap) {
+          return colormap[d.degree];
+        }
+      });
+
+  svg
+    .selectAll("circle")
+    .data(nodes)
+    .join("circle")
+      .attr("stroke-width", 1.5)
+      .attr("r", r)
+      /*.attr("opacity", (d) => {
+        if (d.special == undefined) return 0.8
+      })*/
+      .attr("fill", (d) => {
+        if (d.special == "E0") return "yellow";
+        else if (d.special == "EA") return "red";
+        else if (d.special == "EB") return "blue";
+        else if (d.special == "EAB") return "#f0f";
+        else return "#fff";
+      })
+      .attr("stroke", "#000")
+      // bring to front if d.special is defined
+      .call(drag(simulation))
+      .append('title').text(d => d.j);
+
+  svg.selectAll("line")
+    .filter((d) => (d.special != undefined))
+    .raise()
+    .each((l) => {
+      svg.selectAll("circle")
+        .filter((c) => (c.j == l.source.j || c.j == l.target.j))
+        .raise();
+    });
+  
+  svg.selectAll("circle")
+    .filter((d) => (d.special != undefined))
+    .raise();
+
+  simulation.force("box_force", function() {
+      for (var i = 0, n = nodes.length, d; i < n; ++i) {
+          d = nodes[i];
+          d.x = Math.max(2*r+10, Math.min(w - 2*r-10, d.x));
+          d.y = Math.max(2*r+10, Math.min(h - 2*r-10, d.y));
+      }
+  });
+
+  simulation.on("tick", () => {
+    svg.selectAll("line")
+        .attr("x1", d => d.source.x)
+        .attr("y1", d => d.source.y)
+        .attr("x2", d => d.target.x)
+        .attr("y2", d => d.target.y);
+
+    svg.selectAll("circle")
+        .attr("cx", d => d.x)
+        .attr("cy", d => d.y);
+    //alert()
+  });
+});
+
+function paintLines() {
+  svg
+    .selectAll("line")
+      .attr("stroke", function(d) {
+        if (d.special in colormap){
+            return colormap[d.special](d);
+        } else if (d.degree in colormap) {
+          return colormap[d.degree];
+        }
+      });
+}
+
+drag = simulation => {
+  
+  function dragstarted(d) {
+    if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+    d.fx = d.x;
+    d.fy = d.y;
+  }
+  
+  function dragged(d) {
+    d.fx = d3.event.x;
+    d.fy = d3.event.y;
+  }
+  
+  function dragended(d) {
+    if (!d3.event.active) simulation.alphaTarget(0);
+    d.fx = null;
+    d.fy = null;
+  }
+  
+  return d3.drag()
+      .on("start", dragstarted)
+      .on("drag", dragged)
+      .on("end", dragended);
+}

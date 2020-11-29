@@ -1,0 +1,60 @@
+---
+permalink: /glossary.html
+title: Glossary
+---
+{% extends "layouts/base.njk" %}
+
+{% block content %}
+<h1>Glossary</h1>
+
+<a id="supersingular-elliptic-curves"></a>
+<h2>Supersingular elliptic curves</h2>
+
+<p>An elliptic curve over a finite field of characteristic p is supersingular if it has no p-torsion points. This is equivalent to the fact that the endomorphism ring of the curve is an order in an imaginary quadratic field. The j-invariant of a supersingular curve is defined over \(\mathbb{F}_{p^2}\). There are \([p/12] + \varepsilon\) supersingular j-invariants, where \(\varepsilon = 0,1,1,2\) whenever \(p \equiv 1, 5, 7, 11 \mod 12\) (respectively).</p>
+
+<hr>
+
+<a id="isogeny"></a>
+<h2>Isogenies and degree</h2>
+
+<p>Given two elliptic curves \(E\) and \(E'\), an isogeny between them is a non-constant (and thus surjective) morphism of curves \(E\to E'\) fixing the point at infinity. The isogeny is called separable or inseparable according to the extension of fields \(K(E)/K(E')\). The degree of the isogeny is \([K(E):K(E)]\), and it equals the size of the kernel whenever it is separable. If the degree \(\ell\) is different from the characteristic \(p\), the isogeny is always separable.</p>
+
+<hr>
+
+<a id="supersingular-isogeny-graph"></a>
+<h2>The supersingular isogeny graph \(\Gamma_1(\ell;p)\)</h2>
+
+<p>For $\ell \neq p$, the graph \(\Gamma_1(\ell;p)\) has as vertices the set of supersingular j invariants (i.e., the isomorphism classes of supersingular elliptic curves), and as edges the set of \(\ell\)-degree isogenies between them.</p>
+
+<hr>
+
+<a id="spine"></a>
+<h2>The spine</h2>
+
+<p>The spine of \(\Gamma_1(\ell;p)\) is the induced subgraph of vertices that are defined over \(\mathbb{F}_p\).</p>
+
+<hr>
+
+<a id="diameter"></a>
+<h2>Diameter</h2>
+
+<p>The diameter of a graph is the largest minimal distance between any two nodes. The diameter of a graph is dominated by the eigenvalues of its adjacency matrix (see below). The fact that \(\Gamma_1(\ell;p)\) is an expander family (for fixed \(\ell\)) implies that the diameters are proportional to \(\log p\).</p>
+
+<hr>
+
+<a id="isogenous-conjugate-pairs"></a>
+<h2>Isogenous conjugate pairs</h2>
+
+<p>Each j-invariant outside of the spine, \(j\in\mathbb{F}_{p^2}\), has a Frobenius conjugate, \(j^p\). This corresponds to the Frobenius (inseparable) isogeny that any curve has: \(E \to E^{(p)}\), given by \((x,y)\mapsto (x^p,y^p)\). An \(\ell\)-isogenous conjugate pair is a pair of vertices \(j,j^p\) that are connected by an \(\ell\)-degree isogeny. The number of such pairs is denoted by \(c_\ell\).</p>
+
+<hr>
+
+<a id="eigenvalues"></a>
+<h2>Eigenvalues</h2>
+
+<p>The supersingular isogeny graph \(\Gamma_1(\ell;p)\) is an expander Ramanujan graph. This means that if we order the eigenvalues of its adjacency matrix, \(\lambda_1 > \lambda_2 \geq \cdots \geq \lambda_n\), we will have \(\lambda_1 = \ell + 1\) (the regular degree of the graph), and \(\max(|\lambda_2|,|\lambda_n|) \leq 2\sqrt{\ell}\). We list here these two eigenvalues, except in the cases where the graph has fewer than 4 vertices.</p>
+
+
+
+
+{% endblock %}

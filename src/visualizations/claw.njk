@@ -1,0 +1,37 @@
+---
+permalink: /visualizations/claw.html
+---
+{% extends "layouts/base.njk" %}
+
+{% block content %}
+	<h1>Claw attack with p=62207</h1>
+
+	<p>p = 2<sup>8</sup> 3<sup>5</sup> - 1 = 62207. Number of supersingular j-invariants: 5185, only showing 907 of them.</p>
+	<p>Color legend: <span style="color: #f00">2-isogenies</span>, <span style="color: #00f">3-isogenies</span>, <span style="color:#c68b03; font-weight: bold;">E<sub>0</sub>: y<sup>2</sup> = x<sup>3</sup> + x</span>, <span style="color:#f00; font-weight: bold;">Alice</span>, <span style="color:#00f; font-weight: bold;">Intermediate curves</span>, <span style="color:#f0f; font-weight: bold;">E<sub>1</sub></span>.</p>
+
+	<div id="chart"></div>
+
+	<h2>Explanation</h2>
+
+	<p>If we wanted to brute-force attack an SIDH public key, we could try every possible private key (m, n). In our example, there are 2<sup>8</sup> + 2<sup>7</sup> possible private keys for Alice. The <strong>claw attack</strong> is an improvement on this.</p>
+
+	<p>What we can do is explore all curves connected to <span style="color: #c68b03; font-weight: bold;">E<sub>0</sub></span> via isogenies of degree 2<sup>4</sup> and store them in a hash table. After that, we may start a DFS exploration from <span style="color: #f00; font-weight: bold;">E<sub>A</sub></span> bounded to depth 2<sup>4</sup> until we find a collision with the stored values, <span style="color: #f0f; font-weight: bold;">E<sub>1</sub></span>.</p>
+
+	<p>This way, we will recover the secret isogeny that <span style="color: #f00; font-weight: bold;">Alice</span> has as secret.</p>
+
+
+<script src="/visualizations/d3.v5.min.js"></script>
+<script src="/visualizations/colormap.js"></script>
+<script>
+	const data = "/visualizations/claw.json",
+		  charge = -15;
+
+	const pins = {
+		"E0": [0, 1],
+		"EAB": [0, 1],
+		"EA": [1, 0]
+	};
+</script>
+<script src="/visualizations/iexplorer.js"></script>
+
+{% endblock %}

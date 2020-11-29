@@ -1,0 +1,29 @@
+---
+title: Home
+---
+
+{% extends "layouts/base.njk" %}
+
+{% block content %}
+
+<h1>Home</h1>
+
+<p>Welcome to the Isogeny Database. This database contains a collection of data on graphs of supersingular elliptic curves. In the future, we expect to add higher-genus analogues of these graphs.</p>
+
+<p>Isogeny graphs offer us an algorithmic way of dealing with isogeny classes of elliptic curves (and more generally, abelian varieties). They have been used for a variety of algorithms, for instance, to compute endomorphism rings of elliptic curves. Their usage in proposed post-quantum cryptography systems has made them even more interesting. However, the isogeny-based cryptography community still lacks a collection of examples of such graphs.</p>
+
+<p>This is our first approach to create this collection, building upon the work of many others who have already worked with these graphs. For the time being, the database contains all graphs for characteristic up to 30,000 and isogeny degrees 2 through 11, and a basic list of invariants for each graph. This will be expanded to include some examples for larger characteristic and also new invariants. A long-term goal is to list examples for higher genera, and to give substantial evidence to discover behavior in such cases.</p>
+
+<hr>
+
+<p>You can explore the database by ranges of primes. Each page contains a range of 100 primes. You can also <a href="https://drive.google.com/file/d/1wmx_TIwPnX42WNs1ujCcqjqjWs7CP-sM/view?usp=sharing" target="_blank">download the full database</a>. This is a zip file (about 300MB) containing: <a href="/glossary.html#supersingular-elliptic-curves">supersingular j-invariants</a> for each prime, adjacency matrices in <a href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.load_npz.html" target="_blank">compressed npz format</a>, metadata and graph invariants.</p>
+
+<p>
+	{% for page in collections.g1pages | sortGraphPages %}
+	<a href="{{ page.url }}">
+{{ page.data.graphs[0].prime }} - {{ page.data.graphs[page.data.graphs.length - 1].prime }}</a> / 
+	{% endfor %}
+</p>
+
+
+{% endblock %}

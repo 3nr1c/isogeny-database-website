@@ -1,0 +1,24 @@
+---
+permalink: /visualizations/graph.html
+---
+{% extends "layouts/base.njk" %}
+
+{% block content %}
+	<h1>Supersingular isogeny graph</h1>
+
+	<p>p = 2<sup>5</sup> 3<sup>3</sup> - 1 = 863. Number of supersingular j-invariants: 73.</p>
+	<p>Color legend: <span style="color: #f00">2-isogenies</span>, <span style="color: #00f">3-isogenies</span>, <span style="color:#c68b03; font-weight: bold;">E<sub>0</sub>: y<sup>2</sup> = x<sup>3</sup> + x</span>.</p>
+
+	<div id="chart"></div>
+
+<script src="/visualizations/d3.v5.min.js"></script>
+<script src="/visualizations/colormap.js"></script>
+<script>
+	const data = "/visualizations/graph.json",
+		  charge = -200;
+
+	const pins = {};
+</script>
+<script src="/visualizations/iexplorer.js"></script>
+
+{% endblock %}

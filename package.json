@@ -1,0 +1,18 @@
+{
+  "name": "isogeny-db-website",
+  "version": "1.0.0",
+  "description": "",
+  "main": ".eleventy.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "eleventy",
+    "watch": "npx @11ty/eleventy --watch",
+    "serve": "eleventy --serve"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "fast-glob": "^3.2.4",
+    "fs": "0.0.1-security"
+  }
+}
